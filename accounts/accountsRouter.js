@@ -51,7 +51,7 @@ router.put('/:id', validateAccountID, validateAccountBody, (req, res) => {
 })
 
 // Delete an account
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateAccountID, (req, res) => {
     const id = req.params.id;
     db.remove(id)
         .then((count) => {
@@ -59,6 +59,18 @@ router.delete('/:id', (req, res) => {
         })
         .catch (() => {
           res.status(500).json({error: "Can't delete that user. Hmm."})  
+        })
+})
+
+router.get('/:limit/:sortBy/:sortDir', (req, res) => {
+    const { limit, sortBy, sortDir} = req.params;
+    console.log(sortBy)
+    db.getByQuery(limit, sortBy, sortDir)
+        .then((list) => {
+            res.status(200).json(list)
+        })
+        .catch(() => {
+            res.status(500).json({error: "Couldn't retrieve accounts with that query."})
         })
 })
 

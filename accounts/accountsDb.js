@@ -39,6 +39,8 @@ function remove(id) {
         .del();
 }
 
-function getByQuery() {
-    console.log("Figure this out in a bit!")
+function getByQuery(limit, sortBy, sortDir) {
+    return db('accounts')
+        .limit(limit)
+        .orderBy(sortBy, sortDir)
 }
