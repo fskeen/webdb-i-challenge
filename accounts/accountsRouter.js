@@ -35,4 +35,19 @@ router.post('/', validateAccountBody, async (req, res) => {
     }
 })
 
+// Edit account information
+
+router.put('/:id', validateAccountID, validateAccountBody, (req, res) => {
+    const id = req.params.id;
+    const changes = req.body;
+        db.update(id, changes)
+        .then (edited => { if (edited)
+            return res.status(200).json({message: `Account successfully updated.`}) 
+        })        
+        .catch ( err => {
+            console.log(err)
+            res.status(500).json({error: "Unable to update account."})
+        })
+})
+
 module.exports = router
