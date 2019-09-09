@@ -50,4 +50,16 @@ router.put('/:id', validateAccountID, validateAccountBody, (req, res) => {
         })
 })
 
+// Delete an account
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    db.remove(id)
+        .then((count) => {
+                res.status(200).json({message: `${count} account deleted successfully.`})
+        })
+        .catch (() => {
+          res.status(500).json({error: "Can't delete that user. Hmm."})  
+        })
+})
+
 module.exports = router
