@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require('./accountsDb')
+const { validateAccountID, validateAccountBody } = require("../middleware/validation")
 
 router.use(express.json())
 
@@ -18,15 +19,20 @@ router.get('/', async (req, res) => {
 
 // Get account by ID
 
-// router.get('/:id', async (req, res) => {
-//     const id = req.params.id
-//     try {
-//         const account = db.getById(id)
-//         res.status(200).json(account)
-//     } catch (err) {
-//         console.log(err)
-//         res.status(500)
-//     }
-// })
+router.get('/:id', validateAccountID, (req, res) => {
+    res.status(200).json(req.validAccount)
+})
+
+// Create new account
+
+router.post('/', validateAccountBody, async (req, res) => {
+    const account = req.body;
+    try {
+        const newAccount = await db.insert(account)
+        res.status(201).json({account: newAccount})
+    } catch (err) {
+        res.status(500).json({error: "Couldn't add account to database."})
+    }
+})
 
 module.exports = router

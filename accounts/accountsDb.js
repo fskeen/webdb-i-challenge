@@ -15,7 +15,7 @@ function get() {
 
 function getById(id) {
     return db('accounts')
-        .where('id', id)
+        .where({ id })
         .first();
 }
 
